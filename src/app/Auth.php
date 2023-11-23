@@ -24,10 +24,8 @@ class Auth extends App
      */
     public static function user()
     {
-        if (isset($_SESSION[self::$userSessionKey]['user'])) {
+        if (!empty($_SESSION[self::$userSessionKey]['user'])) {
             return $_SESSION[self::$userSessionKey]['user'];
-        } else {
-            self::logout();
         }
     }
 
@@ -41,6 +39,7 @@ class Auth extends App
         if (isset($_SESSION[self::$userSessionKey]['user'])) {
             unset($_SESSION[self::$userSessionKey]['user']);
         }
+        session_destroy();
         Helper::redirect(LOGIN_PAGE);
     }
 }

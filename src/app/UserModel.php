@@ -1,5 +1,4 @@
 <?php
-
 class UserModel extends BaseModel
 {
     private static $model = null;
@@ -34,7 +33,6 @@ class UserModel extends BaseModel
             $stmt = $conn->prepare("SELECT * FROM users WHERE email = :email");
             $stmt->bindParam(':email', $email, PDO::PARAM_STR);
             $stmt->execute();
-
             $user = $stmt->fetch(PDO::FETCH_OBJ);
             if ($user && password_verify($password, $user->password)) {
                 // Unset the password before returning the user info for security
@@ -60,20 +58,32 @@ class UserModel extends BaseModel
      */
     public function register(string $name, string $email, string $password)
     {
+        $isCreated = false;
         try {
+            $password = password_hash($password, PASSWORD_DEFAULT);
             $conn = Database::getInstance()->getConnection();
-            $stmt = $conn->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
-            $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+
+            //duplicate check
+            $stmt = $conn->prepare("SELECT id FROM users WHERE email = :email");
             $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-            $stmt->bindParam(':password', $password, PDO::PARAM_INT);
-            if ($stmt->execute()) {
-                return true;
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_OBJ);
+            if ($user) {
+                //already exist              
+                Helper::setFlush(['error' => 'This email id already registered']);
             } else {
-                return false;
+                //register new email
+                $stmt = $conn->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
+                $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+                $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+                $stmt->bindParam(':password', $password, PDO::PARAM_INT);
+                if ($stmt->execute()) {
+                    $isCreated = true;
+                }
             }
         } catch (PDOException $e) {
             Helper::log($e->getMessage());
-            return false;
         }
+        return $isCreated;
     }
 }

@@ -3,12 +3,15 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+
+define('BASE_URL', 'http://localhost/html/inhouse/core_php_sdk/src/');
+define('LOGIN_PAGE', 'index.php');
+
 //App
 define('APP_DEBUG', true);
 define('APP_ROOT', __DIR__);
 define('APP_LOG', APP_ROOT . '/log');
-define('BASE_URL', 'http://localhost/html/assignment/');
-define('LOGIN_PAGE', 'index.php');
+
 
 //Security
 define('CSRF_TOKEN', 'csrf_token');
@@ -33,17 +36,3 @@ function myAutoloader($className)
     }
 }
 spl_autoload_register('myAutoloader');
-
-// $name = 'ganesh';
-// $email = 'ganeshsoni@gmail.com';
-// $password = password_hash('test', PASSWORD_DEFAULT);
-// $result = UserModel::model()->register($name, $email, $password);
-// if ($result) {
-//     echo "user created successfully";
-// } else {
-//     echo "user not created";
-// }
-
-// $user = UserModel::model()->login('ganeshsoni@gmail.com', 'test');
-
-// Helper::debug($user);

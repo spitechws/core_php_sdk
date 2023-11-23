@@ -12,8 +12,8 @@ if (Helper::csrfValidate()) {
     if ($user) {
         Helper::redirect('user/index.php')->with(['user' => $user])->go();
     } else {
-        Helper::redirect(BASE_URL)->with(['error' => 'invalid login details']);
+        Helper::redirect('index.php')->with(['error' => 'invalid login details']);
     }
 } else {
-    Helper::redirect(BASE_URL)->with(['error' => 'Form token expired']);
+    Helper::redirect('index.php')->with(['error' => 'Form token expired']);
 }

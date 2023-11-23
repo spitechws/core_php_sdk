@@ -1,4 +1,9 @@
-<?php require_once('config.php'); ?>
+<?php
+require_once('config.php');
+if (Auth::user()) {
+    Helper::redirect('user/');
+}
+?>
 <!doctype html>
 <html lang="en">
 

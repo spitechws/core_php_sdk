@@ -1,0 +1,17 @@
+{
+    "name": "spson/core_php_sdk",
+    "require": {
+        "phpunit/phpunit": "^10.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Spson\\CorePhpSdk\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Saravanakumar.Muthusamy",
+            "email": "spsoni.pm@gmail.com"
+        }
+    ]
+}

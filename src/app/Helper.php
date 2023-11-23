@@ -107,7 +107,7 @@ class Helper extends App
      * @param  string $url
      * @return Helper
      */
-    public static function redirect(string $url): Helper
+    public static function redirect(string $url = ''): Helper
     {
         $helper = new static();
         $helper->url = self::url($url);
@@ -152,7 +152,7 @@ class Helper extends App
                 session_start();
             }
             foreach ($this->flashData as $key => $value) {
-                $_SESSION[$key] = $value;
+                $_SESSION[self::$flashKey][$key] = $value;
             }
         }
         // Redirect
@@ -171,8 +171,38 @@ class Helper extends App
      */
     public static function getFlush(string $key)
     {
-        return isset($_SESSION[self::$flashKey][$key]) ? $_SESSION[self::$flashKey][$key] : '';
+        $data = '';
+        if (isset($_SESSION[self::$flashKey][$key])) {
+            $data = $_SESSION[self::$flashKey][$key];
+            unset($_SESSION[self::$flashKey][$key]);
+        }
+        return $data;
     }
+
+    /**
+     * set session data
+     *
+     * @param  string $key
+     * @return void
+     */
+    public static function setFlush(array $param)
+    {
+        foreach ($param as $key => $value) {
+            $_SESSION[self::$flashKey][$key] = $value;
+        }
+    }
+
+    /**
+     * check session data
+     *
+     * @param  string $key
+     * @return void
+     */
+    public static function hasFlush(string $key)
+    {
+        return isset($_SESSION[self::$flashKey][$key]);
+    }
+
 
     /**
      * sanitize for xss
